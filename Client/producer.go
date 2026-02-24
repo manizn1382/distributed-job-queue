@@ -8,7 +8,10 @@ import (
 )
 
 
+var mu sync.Mutex
 
+var numberBuilder = model.JobBuilder[int]{}
+var stringBuilder = model.JobBuilder[string]{}
 
 
 func StartProduce(){
@@ -19,11 +22,15 @@ func StartProduce(){
 
 	for {
 
-		jType := (rand.Intn(selectorMax - selectorMin) + selectorMin)
+		jType := rand.Intn(selectorMax - selectorMin) + selectorMin
 
 		if jType % 2 == 0 {
 
-			job := model.IntegerJob{}
+			mu.Lock()
+			setting.JobId+=1
+			job := numberBuilder.CreateJob(setting.JobId)
+			mu.Unlock()
+
 			job.SetId(setting.JobId)
 			job.SetValue(job.Produce())
 
