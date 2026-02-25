@@ -7,12 +7,11 @@ import (
 	"math/rand"
 )
 
+var numberJob = model.JobBuilder[int]{}
+var stringJob = model.JobBuilder[string]{}
 
-var mu sync.Mutex
-
-var numberBuilder = model.JobBuilder[int]{}
-var stringBuilder = model.JobBuilder[string]{}
-
+var numberBuilder = model.NumberProducer{} 
+var stringBuilder = model.StringProducer{} 
 
 func StartProduce(){
 
@@ -26,21 +25,24 @@ func StartProduce(){
 
 		if jType % 2 == 0 {
 
-			mu.Lock()
+			setting.Mu.Lock()
 			setting.JobId+=1
-			job := numberBuilder.CreateJob(setting.JobId)
-			mu.Unlock()
-
+			job := numberJob.CreateJob(setting.JobId)
 			job.SetId(setting.JobId)
-			job.SetValue(job.Produce())
+			job.SetValue(numberBuilder.GetNumber())
+			setting.Mu.Unlock()
+
 
 		}
 
 		if jType % 2 != 0 {
 
-			job := model.StringJob{}
+			setting.Mu.Lock()
+			setting.JobId+=1
+			job := stringJob.CreateJob(setting.JobId)
 			job.SetId(setting.JobId)
-			job.SetValue(job.Produce())
+			job.SetValue(stringBuilder.GetString())
+			setting.Mu.Unlock()
 
 		}
 	}

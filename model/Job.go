@@ -1,11 +1,6 @@
 package model
 
-import(
-	"jobQ/setting"
-	"math/rand"
-)
-
-type Job[T AllowedTypes] struct{
+type Job[T JobTypes] struct{
 	id int
 	value T
 }
@@ -27,9 +22,4 @@ func (j *Job[T]) SetId(id int){
 
 func (j *Job[T]) SetValue(value T){
 	j.value = value
-}
-
-
-func (j *Job[T]) Produce() T {
-	return rand.Intn(setting.Max - setting.Min) + setting.Min
 }

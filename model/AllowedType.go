@@ -1,6 +1,6 @@
 package model
 
 
-type AllowedTypes interface{
+type JobTypes interface{
 	int | string
 }
