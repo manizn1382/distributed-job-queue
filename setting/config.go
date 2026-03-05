@@ -19,3 +19,9 @@ var BrokerChannel = make(chan any , ProducerCount)
 var JobId = 0
 
 var Mu sync.Mutex
+
+var ProducerEndPoint string = "api/job"
+
+var ProducerEndPointAddr = "http://localhost:8080/" + (ProducerEndPoint) 
+
+var ContentType = "application/json"
